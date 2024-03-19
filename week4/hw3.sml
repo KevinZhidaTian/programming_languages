@@ -68,3 +68,15 @@ fun first_answer function inputList =
 		| x::xs' => case function x of
 						NONE => first_answer function xs'
 						| SOME y => y
+
+fun all_answers function inputList =
+	let
+	  fun aux lst accumulator =
+			case lst of
+			[] => SOME accumulator
+			|x::xs' => case function x of
+						NONE => NONE
+						| SOME y => aux xs' (accumulator @ y)
+	in
+	  aux inputList []
+	end
