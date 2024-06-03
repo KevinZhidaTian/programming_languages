@@ -70,15 +70,47 @@
 
 (define (vector-assoc v vec)
     (letrec ([f (lambda (pos) 
-        (if (>= pos (vector-length vec))
-        #f
-        (if (equal? v (car (vector-ref vec pos)))
-            (vector-ref vec pos)
-            (f (+ pos 1))
-        )))])
+        (cond [(>= pos (vector-length vec)) #f]
+            [(not (pair? (vector-ref vec pos))) (f (+ pos 1))]
+            [(equal? v (car (vector-ref vec pos))) (vector-ref vec pos)]
+            [#t (f (+ pos 1))]))])
     (f 0))
 )
 
-(vector-assoc 6 (vector (cons 2 1) (cons 3 1) (cons 4 1) (cons 5 1)))
+(define (cached-assoc xs n)
+    (letrec ([cache (make-vector n #f)]
+            [slot 0]
+            [f (lambda (v)
+                    (let ([ans (vector-assoc v cache)])
+                        (if ans
+                            ans
+                            (let ([new-ans (assoc v xs)])
+                                (if new-ans
+                                    (begin
+                                        (vector-set! cache slot new-ans)
+                                        (set! slot (remainder (+ slot 1) n))
+                                        new-ans)
+                                    #f))
+                        )
+                    )
+                )
+            ])
+    f)
+)
 
-(define (cached-assoc xs n))
+(define-syntax while-less
+    (syntax-rules (do)
+        [(while-less e1 do e2)
+        (let ([condition e1])
+            (letrec ([f (lambda () 
+                        (begin
+                            (let ([result e2])
+                                (if (< result condition) (f) #t))
+                            )
+                        )
+                    ])
+            (f))
+        )
+        ]
+    )
+)

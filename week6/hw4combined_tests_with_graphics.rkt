@@ -58,16 +58,16 @@
 ; so you need to comment them out until you are ready.
 ; Add more tests as appropriate, of course.
 
-; (define nums (sequence 0 5 1))
+(define nums (sequence 0 5 1))
 
-; (define files (string-append-map 
-;                (list "dan" "dog" "curry" "dog2") 
-;                ".jpeg"))
+(define files (string-append-map 
+               (list "dan" "dog" "curry" "dog2") 
+               ".jpeg"))
 
-; ; a zero-argument function: call (one-visual-test) to open the graphics window, etc.
-; (define (one-visual-test)
-;   (place-repeatedly (open-window) 0.5 (cycle-lists nums files) 27))
+; a zero-argument function: call (one-visual-test) to open the graphics window, etc.
+(define (one-visual-test)
+  (place-repeatedly (open-window) 0.5 (cycle-lists nums files) 27))
 
-; ; similar to previous but uses only two files and one position on the grid
-; (define (visual-zero-only)
-;   (place-repeatedly (open-window) 0.5 (stream-add-zero dan-then-dog) 27))
+; similar to previous but uses only two files and one position on the grid
+(define (visual-zero-only)
+  (place-repeatedly (open-window) 0.5 (stream-add-zero dan-then-dog) 27))
